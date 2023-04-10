@@ -1,6 +1,6 @@
-﻿extern alias Hinterland;
-using Hinterland;
+﻿using Il2Cpp;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace BetterWaterManagement;
 
@@ -20,12 +20,12 @@ internal class WaterUtils
 
 	internal static string FormatWaterAmount(float liters)
 	{
-		return Utils.GetLiquidQuantityStringNoOunces(InterfaceManager.m_Panel_OptionsMenu.m_State.m_Units, liters);
+		return Utils.GetLiquidQuantityStringNoOunces(InterfaceManager.GetPanel<Panel_OptionsMenu>().State.m_Units, liters);
 	}
 	
 	internal static string FormatWaterAmountWithUnits(float liters)
 	{
-		return Utils.GetLiquidQuantityStringWithUnitsNoOunces(InterfaceManager.m_Panel_OptionsMenu.m_State.m_Units, liters);
+		return Utils.GetLiquidQuantityStringWithUnitsNoOunces(InterfaceManager.GetPanel<Panel_OptionsMenu>().State.m_Units, liters);
 	}
 
 	internal static UILabel? GetUILabel(string name)
@@ -83,7 +83,7 @@ internal class WaterUtils
 
 	internal static bool IsCooledDown(CookingPotItem cookingPotItem)
 	{
-		return (cookingPotItem.m_GracePeriodElapsedHours * 60f) > InterfaceManager.m_Panel_Cooking.m_MinutesGraceTimeInterruptedCooking;
+		return (cookingPotItem.m_GracePeriodElapsedHours * 60f) > InterfaceManager.GetPanel<Panel_Cooking>().m_CookSettings.m_MinutesGraceTimeInterruptedCooking;
 	}
 
 	internal static bool IsWaterItem(GearItem gearItem)
@@ -98,7 +98,7 @@ internal class WaterUtils
 
 	internal static void SetElapsedCookingTimeForWater(CookingPotItem cookingPotItem, float waterLiters)
 	{
-		float hours = waterLiters * InterfaceManager.m_Panel_Cooking.m_MinutesToBoilWaterPerLiter * cookingPotItem.GetTotalBoilMultiplier() / 60f;
+		float hours = waterLiters * InterfaceManager.GetPanel<Panel_Cooking>().m_CookSettings.m_MinutesToBoilWaterPerLiter * cookingPotItem.GetTotalBoilMultiplier() / 60f;
 		SetElapsedCookingTime(cookingPotItem, hours);
 	}
 
@@ -120,7 +120,7 @@ internal class WaterUtils
 
 	private static Texture GetTexture(LiquidItem liquidItem)
 	{
-		return Resources.Load("Textures/GEAR_WaterBottle" + GetWaterSuffix(liquidItem)).Cast<Texture>();
+		return Addressables.LoadAssetAsync<Texture>("GEAR_WaterBottle" + GetWaterSuffix(liquidItem)).WaitForCompletion();
 	}
 
 	private static string StripSuffix(string sound, string suffix)

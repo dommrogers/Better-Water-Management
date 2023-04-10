@@ -1,7 +1,6 @@
 {
     "Name": "Waterskin",
-    "RequiredGear": ["GEAR_RabbitPeltDried", "GEAR_GutDried"],
-    "RequiredGearUnits": [4, 3],
+    "RequiredGear": [{"Item":"GEAR_RabbitPeltDried","Count":4}, {"Item":"GEAR_GutDried","Count":3}],
     "KeroseneLitersRequired": 0,
     "GunpowderKGRequired": 0,
     "RequiredTool": "GEAR_SewingKit",

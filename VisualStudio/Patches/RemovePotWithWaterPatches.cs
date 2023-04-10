@@ -1,6 +1,5 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
 using HarmonyLib;
-using Hinterland;
 using UnityEngine;
 
 namespace BetterWaterManagement;
@@ -30,14 +29,14 @@ internal static class DrinkFromPot
 		waterSupply.m_DrinkingAudio = GameManager.GetInventoryComponent().GetPotableWaterSupply().m_WaterSupply.m_DrinkingAudio;
 
 		GameManager.GetThirstComponent().AddThirstOverTime(waterVolumeToDrink, waterSupply.m_TimeToDrinkSeconds);
-		InterfaceManager.m_Panel_GenericProgressBar.Launch(Localization.Get("GAMEPLAY_DrinkingProgress"), waterSupply.m_TimeToDrinkSeconds, 0f, 0f, null, waterSupply.m_DrinkingAudio, true, false, new System.Action<bool, bool, float>(OnDrinkComplete));
+		InterfaceManager.GetPanel<Panel_GenericProgressBar>().Launch(Localization.Get("GAMEPLAY_DrinkingProgress"), waterSupply.m_TimeToDrinkSeconds, 0f, 0f, waterSupply.m_DrinkingAudio, null, true, false, new System.Action<bool, bool, float>(OnDrinkComplete));
 		GameManager.GetPlayerVoiceComponent().BlockNonCriticalVoiceForDuration(waterSupply.m_TimeToDrinkSeconds + 2f);
 	}
 	internal static void OnDrinkComplete(bool success, bool playerCancel, float progress)
 	{
 		GameManager.GetThirstComponent().ClearAddThirstOverTime();
 		cookingPot.m_LitersWaterBeingBoiled -= progress * waterVolumeToDrink;
-		Object.Destroy(waterSupply);
+		UnityEngine.Object.Destroy(waterSupply);
 		// Enable drinking without taking the remaining water
 		gearItem.m_WaterSupply = null;
 	}

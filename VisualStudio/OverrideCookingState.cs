@@ -1,7 +1,6 @@
-﻿extern alias Hinterland;
-using CustomSaveDataUtilities;
-using Hinterland;
-using UnhollowerBaseLib.Attributes;
+﻿using Il2Cpp;
+using Il2CppInterop.Runtime.Attributes;
+using MelonLoader;
 
 namespace BetterWaterManagement;
 

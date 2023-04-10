@@ -1,6 +1,5 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
 using HarmonyLib;
-using Hinterland;
 using UnityEngine;
 
 namespace BetterWaterManagement;
@@ -17,6 +16,7 @@ internal class WaterButtons
 
 	internal static void Initialize(ItemDescriptionPage itemDescriptionPage)
 	{
+		MelonLoader.MelonLogger.Warning("itemDescriptionPage "+ itemDescriptionPage.gameObject.name);
 		if (itemDescriptionPage == null) return;
 
 		fillText = Localization.Get("GAMEPLAY_BWM_FillBottle");
@@ -24,15 +24,15 @@ internal class WaterButtons
 		dumpText = Localization.Get("GAMEPLAY_BWM_DumpBottle");
 
 		GameObject drinkButton = itemDescriptionPage.m_MouseButtonEquip;
-		fillButton = Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
+		fillButton = UnityEngine.Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
 		fillButton.transform.Translate(0, -0.09f, 0);
 		Utils.GetComponentInChildren<UILabel>(fillButton).text = fillText;
 
-		transferButton = Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
+		transferButton = UnityEngine.Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
 		transferButton.transform.Translate(0, -0.18f, 0);
 		Utils.GetComponentInChildren<UILabel>(transferButton).text = transferText;
 
-		dumpButton = Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
+		dumpButton = UnityEngine.Object.Instantiate<GameObject>(drinkButton, drinkButton.transform.parent, true);
 		dumpButton.transform.Translate(0, -0.27f, 0);
 		Utils.GetComponentInChildren<UILabel>(dumpButton).text = dumpText;
 
@@ -40,7 +40,7 @@ internal class WaterButtons
 		AddAction(transferButton, new System.Action(OnTransfer));
 		AddAction(dumpButton, new System.Action(OnDump));
 
-		SetActive(true);
+		SetActive(false);
 	}
 
 	private static void AddAction(GameObject button, System.Action action)
@@ -89,7 +89,7 @@ internal class WaterButtons
 		}
 		GameAudioManager.PlayGuiConfirm();
 		float refuelDuration = Mathf.Max(maximumWaterRefill * 4, 1);
-		InterfaceManager.m_Panel_GenericProgressBar.Launch(Localization.Get("GAMEPLAY_BWM_FillingProgress"), refuelDuration, 0f, 0f,
+		InterfaceManager.GetPanel<Panel_GenericProgressBar>().Launch(Localization.Get("GAMEPLAY_BWM_FillingProgress"), refuelDuration, 0f, 0f,
 						"Play_SndActionRefuelLantern", null, false, true, new System.Action<bool, bool, float>(OnFillFinished));
 	}
 	private static void OnFillFinished(bool success, bool playerCancel, float progress)
@@ -126,7 +126,7 @@ internal class WaterButtons
 		float maximumWaterTransfer = Mathf.Min(spaceAvailable, liquidItem.m_LiquidLiters);
 		GameAudioManager.PlayGuiConfirm();
 		float refillDuration = Mathf.Max(maximumWaterTransfer * 4, 1);
-		InterfaceManager.m_Panel_GenericProgressBar.Launch(Localization.Get("GAMEPLAY_BWM_TransferingProgress"), refillDuration, 0f, 0f,
+		InterfaceManager.GetPanel<Panel_GenericProgressBar>().Launch(Localization.Get("GAMEPLAY_BWM_TransferingProgress"), refillDuration, 0f, 0f,
 						"Play_SndActionRefuelLantern", null, false, true, new System.Action<bool, bool, float>(OnTransferFinished));
 	}
 	private static void OnTransferFinished(bool success, bool playerCancel, float progress)
@@ -157,7 +157,7 @@ internal class WaterButtons
 		GameAudioManager.PlayGuiConfirm();
 		float lostLitersDuration = Mathf.Max(liquidItem.m_LiquidLiters * 4, 1);
 
-		InterfaceManager.m_Panel_GenericProgressBar.Launch(Localization.Get("GAMEPLAY_BWM_DumpingProgress"), lostLitersDuration, 0f, 0f,
+		InterfaceManager.GetPanel<Panel_GenericProgressBar>().Launch(Localization.Get("GAMEPLAY_BWM_DumpingProgress"), lostLitersDuration, 0f, 0f,
 						"Play_SndActionRefuelLantern", null, false, true, new System.Action<bool, bool, float>(OnDumpFinished));
 	}
 	private static void OnDumpFinished(bool success, bool playerCancel, float progress)
@@ -191,15 +191,24 @@ internal class Panel_Inventory_Start
 	}
 }
 
-[HarmonyPatch(typeof(ItemDescriptionPage), nameof(ItemDescriptionPage.BuildItemDescription))]
-internal class ItemDescriptionPage_Start
+[HarmonyPatch(typeof(ItemDescriptionPage), nameof(ItemDescriptionPage.UpdateGearItemDescription))]
+internal class UpdateGearItemDescription
 {
 	private static void Postfix(ItemDescriptionPage __instance, GearItem gi)
 	{
-		if (__instance != InterfaceManager.m_Panel_Inventory?.m_ItemDescriptionPage) return;
-
+		MelonLoader.MelonLogger.Warning("UpdateGearItemDescription " + gi.name);
+		if (__instance != InterfaceManager.GetPanel<Panel_Inventory>()?.m_ItemDescriptionPage) return;
+		MelonLoader.MelonLogger.Warning("__instance OK ");
 		WaterButtons.currentLiquidItemShowing = gi?.GetComponent<LiquidItem>();
-		if (WaterButtons.currentLiquidItemShowing == null || WaterButtons.currentLiquidItemShowing.m_LiquidType != GearLiquidTypeEnum.Water) WaterButtons.SetActive(false);
-		else WaterButtons.SetActive(true);
+		if (WaterButtons.currentLiquidItemShowing == null || WaterButtons.currentLiquidItemShowing.m_LiquidType != GearLiquidTypeEnum.Water)
+		{
+			MelonLoader.MelonLogger.Warning("SetActive false");
+			WaterButtons.SetActive(false);
+		}
+		else
+		{
+			MelonLoader.MelonLogger.Warning("SetActive true");
+			WaterButtons.SetActive(true);
+		}
 	}
 }

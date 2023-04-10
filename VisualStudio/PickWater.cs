@@ -1,5 +1,4 @@
-﻿extern alias Hinterland;
-using Hinterland;
+﻿using Il2Cpp;
 using UnityEngine;
 
 namespace BetterWaterManagement;
@@ -86,9 +85,9 @@ internal class PickWater
 
 	internal static void UpdateDrinking(Panel_PickWater panel)
 	{
-		InterfaceManager.m_Panel_HUD.m_InspectMode_Equip.gameObject.SetActive(panel.IsEnabled());
-		InterfaceManager.m_Panel_HUD.m_InspectMode_Equip.text = Localization.Get("GAMEPLAY_DrinkIt");
-		InterfaceManager.m_Panel_HUD.m_InspectMode_Equip.enabled = true;//test
+		InterfaceManager.GetPanel<Panel_HUD>().m_InspectMode_Equip.gameObject.SetActive(panel.IsEnabled());
+		InterfaceManager.GetPanel<Panel_HUD>().m_InspectMode_Equip.text = Localization.Get("GAMEPLAY_DrinkIt");
+		InterfaceManager.GetPanel<Panel_HUD>().m_InspectMode_Equip.enabled = true;//test
 																		//InterfaceManager.m_Panel_HUD.m_InspectMode_Equip.
 	}
 

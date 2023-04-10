@@ -1,6 +1,5 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
 using HarmonyLib;
-using Hinterland;
 using UnityEngine;
 
 namespace BetterWaterManagement;
@@ -90,20 +89,18 @@ internal class Panel_ActionsRadial_GetDrinkItemsInInventory
 [HarmonyPatch(typeof(Panel_Inventory), nameof(Panel_Inventory.CanBeAddedToSatchel))]
 internal class Panel_Inventory_CanBeAddedToSatchel
 {
-	internal static bool Prefix(GearItem gi, ref bool __result)
+	internal static void Prefix(GearItem gi, ref bool __result, ref bool __runOriginal)
 	{
-		if (gi.m_DisableFavoriting)
+		if (!gi.GearItemData.AllowFavoriting)
 		{
-			return false;
+			return;
 		}
 
 		if (WaterUtils.ContainsWater(gi))
 		{
 			__result = true;
-			return false;
+			__runOriginal = false;
 		}
-
-		return true;
 	}
 }
 
@@ -125,7 +122,7 @@ internal class PlayerManager_DrinkFromWaterSupply
 		}
 
 		liquidItem.m_LiquidLiters = ws.m_VolumeInLiters;
-		Object.Destroy(ws);
+		UnityEngine.Object.Destroy(ws);
 		liquidItem.GetComponent<GearItem>().m_WaterSupply = null;
 	}
 }
@@ -146,7 +143,7 @@ internal class PlayerManager_OnDrinkWaterComplete
 		if (gearItem.m_LiquidItem != null)
 		{
 			gearItem.m_LiquidItem.m_LiquidLiters = waterSupply.m_VolumeInLiters;
-			Object.Destroy(waterSupply);
+			UnityEngine.Object.Destroy(waterSupply);
 			gearItem.m_WaterSupply = null;
 		}
 
@@ -160,7 +157,7 @@ internal class PlayerManager_OnDrinkWaterComplete
 			}
 
 			WaterUtils.SetWaterAmount(gearItem.m_CookingPotItem, waterSupply.m_VolumeInLiters);
-			Object.Destroy(waterSupply);
+			UnityEngine.Object.Destroy(waterSupply);
 		}
 
 		if (waterSupply is WaterSourceSupply)

@@ -1,17 +1,17 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
 using HarmonyLib;
-using Hinterland;
 using UnityEngine;
+using Il2CppTLD.Gear;
 
 namespace BetterWaterManagement;
 
 //This patch appends fill labels to the names of water containers
-[HarmonyPatch(typeof(ConditionTableManager), nameof(ConditionTableManager.GetDisplayNameWithCondition))]
+[HarmonyPatch(typeof(GearItemData), nameof(GearItemData.GetDisplayNameWithCondition))]
 internal class ConditionTableManager_GetDisplayNameWithCondition
 {
-	internal static void Postfix(GearItem gearItem, ref string __result)
+	internal static void Postfix(GearItemData __instance, ref string __result)
 	{
-		LiquidItem liquidItem = gearItem.m_LiquidItem;
+		LiquidItem liquidItem = __instance.PrefabReference.LoadAssetAsync<GameObject>().WaitForCompletion().GetComponent<GearItem>().m_LiquidItem;
 		if (!liquidItem || liquidItem.m_LiquidType != GearLiquidTypeEnum.Water)
 		{
 			return;
@@ -33,8 +33,8 @@ internal class ConditionTableManager_GetDisplayNameWithCondition
 }
 
 //This and the next patch makes the hidden inventory watersupply weightless without interfering with other watersupplies.
-[HarmonyPatch(typeof(GearItem), nameof(GearItem.GetItemWeightIgnoreClothingWornBonusKG))]
-internal class GearItem_GetItemWeightIgnoreClothingWornBonusKG
+[HarmonyPatch(typeof(GearItem), nameof(GearItem.GetSingleItemWeightKG))]
+internal class GearItem_GetSingleItemWeightKG
 {
 	internal static void Postfix(GearItem __instance, ref float __result)
 	{
@@ -48,7 +48,8 @@ internal class GearItem_GetItemWeightIgnoreClothingWornBonusKG
 }
 
 //This and the previous patch makes the hidden inventory watersupply weightless without interfering with other watersupplies.
-[HarmonyPatch(typeof(GearItem), nameof(GearItem.GetItemWeightKG))]
+[HarmonyPatch(typeof(GearItem), nameof(GearItem.GetItemWeightKG), new Type[] { typeof(bool) })]
+[HarmonyPatch(typeof(GearItem), nameof(GearItem.GetItemWeightKG), new Type[] { typeof(float),typeof(bool) })]
 internal class GearItem_GetItemWeightKG
 {
 	internal static void Postfix(GearItem __instance, ref float __result)
@@ -99,9 +100,9 @@ internal class Inventory_AddGear
 {
 	private const GearLiquidTypeEnum ModWater = (GearLiquidTypeEnum)1000;
 
-	internal static void Postfix(GameObject go)
+	internal static void Postfix(GearItem gi)
 	{
-		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
+		LiquidItem liquidItem = gi.gameObject.GetComponent<LiquidItem>();
 		if (liquidItem && liquidItem.m_LiquidType == ModWater)
 		{
 
@@ -110,9 +111,9 @@ internal class Inventory_AddGear
 		}
 	}
 
-	internal static void Prefix(Inventory __instance, GameObject go)
+	internal static void Prefix(Inventory __instance, GearItem gi)
 	{
-		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
+		LiquidItem liquidItem = gi.gameObject.GetComponent<LiquidItem>();
 		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
 		{
 			liquidItem.m_LiquidType = ModWater;
@@ -282,7 +283,8 @@ internal class Panel_PickWater_Update
 	}
 }
 
-[HarmonyPatch(typeof(Utils), nameof(Utils.GetInventoryIconTexture))]
+[HarmonyPatch(typeof(Utils), nameof(Utils.GetInventoryIconTexture), new Type[] { typeof(GearItem) })]
+[HarmonyPatch(typeof(Utils), nameof(Utils.GetInventoryIconTexture), new Type[] { typeof(GearItem), typeof(float) })]
 internal class Utils_GetInventoryIconTexture
 {
 	internal static bool Prefix(GearItem gi, ref Texture2D __result)

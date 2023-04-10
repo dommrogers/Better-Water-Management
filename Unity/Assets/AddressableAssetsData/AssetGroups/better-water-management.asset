@@ -1,0 +1,181 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: better-water-management
+  m_EditorClassIdentifier: 
+  m_GroupName: better-water-management
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 76c5d5f38bee93148b28f37c068ad1eb
+  m_SerializeEntries:
+  - m_GUID: 89593b9602365204db623b33a4448b68
+    m_Address: ico_CraftItem__Waterskin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d54cbf64839872e4da43ed6fae346a19
+    m_Address: ico_GearItem__BlackWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bb82f37a021a577498894a4936a867e8
+    m_Address: ico_GearItem__BlueWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b1a72d5b19299b04a80518fe51621f19
+    m_Address: ico_GearItem__BrownWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ba1073797010c4148b5ef7c5adf12768
+    m_Address: ico_GearItem__Cup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: c3bdbd15c71e8a04b8266692e04e7099
+    m_Address: ico_GearItem__GreenWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e48686a6e9b9f634a8afe3088ad77a78
+    m_Address: ico_GearItem__MetalWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 33fb3a8420784ab4c9102e2f394e5837
+    m_Address: ico_GearItem__OrangeWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7862eabaa35450242a71d362591d53b3
+    m_Address: ico_GearItem__PinkWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6812fc6c58629bf49b6298572ce239da
+    m_Address: ico_GearItem__PurpleWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7ec1b2b5fceb10b41ae0e99cfb2e9beb
+    m_Address: ico_GearItem__RandomWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 11f1642473d04da43901138c44fa72a0
+    m_Address: ico_GearItem__RedWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3583bed7e73d7c543ad29958857bcc70
+    m_Address: ico_GearItem__Water500ml_empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: be8616acc65017e43a2c423ed0024c6a
+    m_Address: ico_GearItem__Water500ml_nonpotable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 242e4a30f4f4d7a49bd83ca3906edef0
+    m_Address: ico_GearItem__Water500ml_potable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a4abf5e48f3132e4c9722fd315d36306
+    m_Address: ico_GearItem__Water1000ml_empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 22d7bda4280bcfe47b8117cda875a5a0
+    m_Address: ico_GearItem__Water1000ml_nonpotable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 873f21c8239dc80439a52800e0ddf1bb
+    m_Address: ico_GearItem__Water1000ml_potable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 36204498fbad70c4a9be7b6c03bdba86
+    m_Address: ico_GearItem__Waterskin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1b27bdd1de3b74f48a1e3551d7c22c05
+    m_Address: ico_GearItem__WaterSupplyNone
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3cfbaf76c1813344ebfe3f42f58f7d0b
+    m_Address: ico_GearItem__WhiteWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7177f544eed6cfb4bb65beb1d916b833
+    m_Address: ico_GearItem__YellowWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ceb0be09c0eb5944698a2e4092873f39
+    m_Address: GEAR_BlackWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: b6a429233d9c75c4b8fd49e050e86bf7
+    m_Address: GEAR_BlueWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: a0878cc44a7e59b46a6f1b3253eff8b1
+    m_Address: GEAR_BrownWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 1d7a9210c084d3e4ea1ac6b67e77c223
+    m_Address: GEAR_Cup
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: edcda655ca4c45640b7acf2398a5be7f
+    m_Address: GEAR_GreenWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: d9dacd5c97d862f469bacacfe6638788
+    m_Address: GEAR_MetalWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: bad3d346a3089304994681239b7cb2e8
+    m_Address: GEAR_OrangeWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 87b367cdba704ce42b16f207e53a8c10
+    m_Address: GEAR_PinkWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 3600153e31df7d74dacd9a35d546e514
+    m_Address: GEAR_PurpleWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 4ac85f936efc7d1428f7008ae13196e8
+    m_Address: GEAR_RandomWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 99bbdaa9a48c97a42af022157f017d14
+    m_Address: GEAR_RedWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: f7d24adf2811c134485ef30f4e2a3ff2
+    m_Address: GEAR_Waterskin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 84ffdfa0c6f8e0544aed7b0a1518998d
+    m_Address: GEAR_WhiteWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 15934a45b280a094f80f98c2cc87378e
+    m_Address: GEAR_YellowWaterBottle
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5112cfef4c6940440ba28553a28e71f8
+    m_Address: GEAR_WaterBottle_empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 025d258cbe9b9eb45bc110366368e556
+    m_Address: GEAR_WaterBottle_nonpotable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 5a9e011f256e7d447b8fcd4506f2cda7
+    m_Address: GEAR_WaterBottle_potable
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 28f6eb3748452ff439c73e1df451d617, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a523cef656b486c43b659b392b637d14, type: 2}
+    - {fileID: 11400000, guid: 1b3d7d50a275e0543b46f32af09fd3df, type: 2}

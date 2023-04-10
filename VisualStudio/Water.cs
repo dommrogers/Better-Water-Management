@@ -1,5 +1,5 @@
-﻿extern alias Hinterland;
-using Hinterland;
+﻿using Il2Cpp;
+using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -249,7 +249,7 @@ public class Water
 		GearMessage.AddMessage(
 			waterSupply.name,
 			Localization.Get("GAMEPLAY_BWM_Lost"),
-			" " + Localization.Get(name) + " (" + Utils.GetLiquidQuantityStringWithUnitsNoOunces(InterfaceManager.m_Panel_OptionsMenu.m_State.m_Units, amount) + ")",
+			" " + Localization.Get(name) + " (" + Utils.GetLiquidQuantityStringWithUnitsNoOunces(InterfaceManager.GetPanel<Panel_OptionsMenu>().State.m_Units, amount) + ")",
 			Color.red,
 			false);
 	}

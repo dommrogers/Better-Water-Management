@@ -1,6 +1,6 @@
-﻿extern alias Hinterland;
+﻿using Il2Cpp;
+using Il2CppTLD.Cooking;
 using HarmonyLib;
-using Hinterland;
 using ModComponent.Utils;
 using UnityEngine;
 
@@ -13,14 +13,15 @@ internal class MeltAndCookButton
 
 	public static void Execute()
 	{
-		Panel_Cooking panel_Cooking = InterfaceManager.m_Panel_Cooking;
+		Panel_Cooking panel_Cooking = InterfaceManager.GetPanel<Panel_Cooking>();
 		GearItem cookedItem = panel_Cooking.GetSelectedFood();
 		CookingPotItem cookingPotItem = panel_Cooking.m_CookingPotInteractedWith;
+		CookSettings cookSettings = panel_Cooking.m_CookSettings;
 
 		GearItem result = cookedItem.Drop(1, false, true);
 
-		CookingModifier cookingModifier = ComponentUtils.GetOrCreateComponent<CookingModifier>(result);
-		cookingModifier.additionalMinutes = result.m_Cookable.m_PotableWaterRequiredLiters * panel_Cooking.m_MinutesToMeltSnowPerLiter;
+		CookingModifier cookingModifier = CookingUtils.GetOrCreateComponent<CookingModifier>(result);
+		cookingModifier.additionalMinutes = result.m_Cookable.m_PotableWaterRequiredLiters * cookSettings.m_MinutesToMeltSnowPerLiter;
 		cookingModifier.Apply();
 
 		GameAudioManager.Play3DSound(result.m_Cookable.m_PutInPotAudio, cookingPotItem.gameObject);
@@ -61,7 +62,7 @@ internal class Panel_Cooking_RefreshFoodList
 
 		foreach (GearItem eachGearItem in foodList)
 		{
-			CookingModifier cookingModifier = ComponentUtils.GetComponentSafe<CookingModifier>(eachGearItem);
+			CookingModifier cookingModifier = CookingUtils.GetComponentSafe<CookingModifier>(eachGearItem);
 			cookingModifier?.Revert();
 			//if(cookingModifier) Implementation.Log("{0} reverted from Melt and Cook", eachGearItem.name);
 		}
@@ -124,6 +125,7 @@ internal class Panel_Cooking_UpdateGearItem
 {
 	internal static void Postfix(Panel_Cooking __instance)
 	{
+		CookSettings cookSettings = __instance.m_CookSettings;
 		GearItem cookedItem = __instance.GetSelectedFood();
 		if (cookedItem == null || cookedItem.m_Cookable == null)
 		{
@@ -142,7 +144,7 @@ internal class Panel_Cooking_UpdateGearItem
 		}
 
 		float litersRequired = cookedItem.m_Cookable.m_PotableWaterRequiredLiters;
-		float additionalMinutes = litersRequired * __instance.m_MinutesToMeltSnowPerLiter * cookingPotItem.GetTotalCookMultiplier();
+		float additionalMinutes = litersRequired * cookSettings.m_MinutesToMeltSnowPerLiter * cookingPotItem.GetTotalCookMultiplier();
 
 		__instance.m_Label_CookedItemCookTime.text = GetCookingTime(cookedItem.m_Cookable.m_CookTimeMinutes * cookingPotItem.GetTotalCookMultiplier()) + " (+" + GetCookingTime(additionalMinutes) + " " + Localization.Get("GAMEPLAY_ButtonMelt") + ")";
 	}

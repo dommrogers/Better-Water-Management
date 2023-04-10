@@ -7,7 +7,7 @@ internal static class SpawnProbabilities
 {
 	internal static void AddToModComponent()
 	{
-		SpawnTagManager.AddToTaggedFunctions("BetterWaterManagement", new Func<DifficultyLevel, FirearmAvailability, GearSpawnInfo, float>(GetProbability));
+		SpawnTagManager.AddFunction("BetterWaterManagement", new Func<DifficultyLevel, FirearmAvailability, GearSpawnInfo, float>(GetProbability));
 	}
 	
 	private static float GetProbability(DifficultyLevel difficultyLevel, FirearmAvailability firearmAvailability, GearSpawnInfo gearSpawnInfo)

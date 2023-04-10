@@ -1,6 +1,5 @@
-extern alias Hinterland;
+using Il2Cpp;
 using HarmonyLib;
-using Hinterland;
 using ModComponent.Utils;
 
 namespace BetterWaterManagement;
@@ -119,7 +118,7 @@ internal class CookingPotItem_StartBoilingWater
 	{
 		Water.AdjustWaterToWaterSupply();
 
-		ComponentUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = false;
+		CookingUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = false;
 	}
 }
 
@@ -139,7 +138,7 @@ internal class CookingPotItem_StartMeltingSnow
 	internal static void Postfix(CookingPotItem __instance)
 	{
 		//Implementation.Log("CookingPotItem -- StartMeltingSnow");
-		ComponentUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = false;
+		CookingUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = false;
 	}
 }
 
@@ -163,7 +162,7 @@ internal class CookingPotItem_UpdateBoilingWater
 
 				if (__instance.GetCookingState() == CookingPotItem.CookingState.Ready)
 				{
-					ComponentUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = true;
+					CookingUtils.GetOrCreateComponent<OverrideCookingState>(__instance).ForceReady = true;
 					WaterUtils.SetElapsedCookingTimeForWater(__instance, WaterUtils.GetWaterAmount(__instance));
 				}
 			}
@@ -200,7 +199,7 @@ internal class GearItem_Deserialize
 		float waterRequired = __instance?.m_Cookable?.m_PotableWaterRequiredLiters ?? 0;
 		if (waterRequired > 0)
 		{
-			ComponentUtils.GetOrCreateComponent<CookingModifier>(__instance);
+			CookingUtils.GetOrCreateComponent<CookingModifier>(__instance);
 		}
 	}
 
@@ -208,8 +207,8 @@ internal class GearItem_Deserialize
 	{
 		if (__instance.m_CookingPotItem)
 		{
-			ComponentUtils.GetOrCreateComponent<OverrideCookingState>(__instance);
-			ComponentUtils.GetOrCreateComponent<CookingPotWaterSaveData>(__instance);
+			CookingUtils.GetOrCreateComponent<OverrideCookingState>(__instance);
+			CookingUtils.GetOrCreateComponent<CookingPotWaterSaveData>(__instance);
 		}
 	}
 }
@@ -225,7 +224,7 @@ internal class GearPlacePoint_UpdateAttachedFire
 		}
 
 		CookingPotItem cookingPotItem = placedGearNew.m_CookingPotItem;
-		OverrideCookingState overrideCookingState = ComponentUtils.GetComponentSafe<OverrideCookingState>(cookingPotItem);
+		OverrideCookingState overrideCookingState = CookingUtils.GetComponentSafe<OverrideCookingState>(cookingPotItem);
 
 		if (overrideCookingState?.ForceReady ?? false)
 		{

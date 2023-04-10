@@ -1,16 +1,15 @@
-﻿extern alias Hinterland;
-using HarmonyLib;
-using Hinterland;
+﻿using HarmonyLib;
+using Il2Cpp;
+using Il2CppInterop.Runtime.Attributes;
+using MelonLoader;
 using MelonLoader.TinyJSON;
-using System;
 using System.Reflection;
-using UnhollowerBaseLib.Attributes;
 
 namespace BetterWaterManagement;
 
 //this is to prevent the issue where saving a game and reloading would cause
 //cooking pots with boiled water to become non-potable.
-public class CookingPotWaterSaveData : CustomSaveDataUtilities.ModSaveBehaviour
+public class CookingPotWaterSaveData : ModSaveBehaviour
 {
 	public CookingPotItem.CookingState cookingState;
 	public float litersSnowBeingMelted;
@@ -42,7 +41,7 @@ public class CookingPotWaterSaveData : CustomSaveDataUtilities.ModSaveBehaviour
 	{
 		//Implementation.Log("Serializing CookingPotWaterSaveData");
 		GetFromCookingPot();
-		CookingPotWaterSaveProxy saveProxy = new CookingPotWaterSaveProxy
+		CookingPotWaterSaveProxy saveProxy = new()
 		{
 			cookingState = cookingState,
 			litersSnowBeingMelted = litersSnowBeingMelted,
@@ -131,7 +130,7 @@ internal class CookingPotWaterPatches
 			CookingPotItem cookingPot = __instance.m_CookingPotItem;
 			if (cookingPot != null)
 			{
-				ModComponent.Utils.ComponentUtils.GetOrCreateComponent<CookingPotWaterSaveData>(__instance).GetFromCookingPot();
+				CookingUtils.GetOrCreateComponent<CookingPotWaterSaveData>(__instance).GetFromCookingPot();
 			}
 		}
 	}
