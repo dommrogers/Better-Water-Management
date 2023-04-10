@@ -16,7 +16,6 @@ internal class WaterButtons
 
 	internal static void Initialize(ItemDescriptionPage itemDescriptionPage)
 	{
-		MelonLoader.MelonLogger.Warning("itemDescriptionPage "+ itemDescriptionPage.gameObject.name);
 		if (itemDescriptionPage == null) return;
 
 		fillText = Localization.Get("GAMEPLAY_BWM_FillBottle");
@@ -196,18 +195,14 @@ internal class UpdateGearItemDescription
 {
 	private static void Postfix(ItemDescriptionPage __instance, GearItem gi)
 	{
-		MelonLoader.MelonLogger.Warning("UpdateGearItemDescription " + gi.name);
 		if (__instance != InterfaceManager.GetPanel<Panel_Inventory>()?.m_ItemDescriptionPage) return;
-		MelonLoader.MelonLogger.Warning("__instance OK ");
 		WaterButtons.currentLiquidItemShowing = gi?.GetComponent<LiquidItem>();
 		if (WaterButtons.currentLiquidItemShowing == null || WaterButtons.currentLiquidItemShowing.m_LiquidType != GearLiquidTypeEnum.Water)
 		{
-			MelonLoader.MelonLogger.Warning("SetActive false");
 			WaterButtons.SetActive(false);
 		}
 		else
 		{
-			MelonLoader.MelonLogger.Warning("SetActive true");
 			WaterButtons.SetActive(true);
 		}
 	}
