@@ -65,18 +65,19 @@ internal class GearItem_GetItemWeightKG
 
 //Updates the sound and texture of a water bottle
 //The sound and texture depend on the emptiness and quality of water inside.
-[HarmonyPatch(typeof(GearItem), nameof(GearItem.ManualStart))]
-internal class GearItem_ManualStart
-{
-	internal static void Postfix(GearItem __instance)
-	{
-		LiquidItem liquidItem = __instance.m_LiquidItem;
-		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
-		{
-			WaterUtils.UpdateWaterBottle(__instance);
-		}
-	}
-}
+//[HarmonyPatch(typeof(GearItem), nameof(GearItem.Awake))]
+//internal class GearItem_Awake
+//{
+//	internal static void Postfix(GearItem __instance)
+//	{
+//		LiquidItem liquidItem = __instance.m_LiquidItem;
+//		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
+//		{
+//			MelonLoader.MelonLogger.Warning("GearItem_Awake if | "+ __instance.name);
+//			WaterUtils.UpdateWaterBottle(__instance);
+//		}
+//	}
+//}
 
 //Disables the water adjustments while loading
 [HarmonyPatch(typeof(Inventory), nameof(Inventory.Deserialize))]
@@ -139,11 +140,15 @@ internal class Inventory_AddToWaterSupply
 	}
 }
 
-[HarmonyPatch(typeof(Inventory), "RemoveGear", new System.Type[] { typeof(GameObject) })]
+[HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveGear), new Type[] { typeof(GameObject) })]
 internal class Inventory_RemoveGear
 {
 	internal static void Postfix(GameObject go)
 	{
+		if (go == null)
+		{
+			return;
+		}
 		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
 		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
 		{
@@ -153,11 +158,15 @@ internal class Inventory_RemoveGear
 }
 
 //repeats the previous patch because the method is overloaded
-[HarmonyPatch(typeof(Inventory), "RemoveGear", new System.Type[] { typeof(GameObject), typeof(bool) })]
+[HarmonyPatch(typeof(Inventory), nameof(Inventory.RemoveGear), new Type[] { typeof(GameObject), typeof(bool) })]
 internal class Inventory_RemoveGear2
 {
 	internal static void Postfix(GameObject go)
 	{
+		if (go == null)
+		{
+			return;
+		}
 		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
 		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
 		{

@@ -36,10 +36,10 @@ internal sealed class BetterWaterSettings : JsonModSettings
 	[Slider(0f, 100f, 101)]
 	public float interloperSpawnExpectation = 15f;
 
-	[Name("Wintermute")]
-	[Description("The expected number of times a metal water bottle will randomly spawn in the world based on statistics. Setting to zero disables them on this game mode.  Recommended is 80.")]
-	[Slider(0f, 100f, 101)]
-	public float storySpawnExpectation = 80f;
+	//[Name("Wintermute")]
+	//[Description("The expected number of times a metal water bottle will randomly spawn in the world based on statistics. Setting to zero disables them on this game mode.  Recommended is 80.")]
+	//[Slider(0f, 100f, 101)]
+	//public float storySpawnExpectation = 80f;
 
 	[Name("Challenges")]
 	[Description("The expected number of times a metal water bottle will randomly spawn in the world based on statistics. Setting to zero disables them on this game mode.  Recommended is 80.")]

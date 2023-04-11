@@ -123,7 +123,7 @@ public class Water
 		WATER.Add(nonPotableDelta, LiquidQuality.NonPotable);
 
 		WATER.UpdateAmounts();//Recalculates the total amounts of water held and the total capacities for each type
-		WATER.UpdateBottles();//Updates the sound and texture of each water bottle in the inventory
+		//WATER.UpdateBottles();//Updates the sound and texture of each water bottle in the inventory
 
 		float potableWaterLost = potableWaterSupply.m_VolumeInLiters - WATER.ActualPotable; //This water could not be added due to lack of space. It is lost.
 		potableWaterSupply.m_VolumeInLiters = WATER.ActualPotable;
@@ -219,7 +219,7 @@ public class Water
 		}
 
 		UpdateAmounts();
-		UpdateBottles();
+		//UpdateBottles();
 	}
 
 	/// <summary>
@@ -408,7 +408,7 @@ public class Water
 	{
 		foreach (LiquidItem eachLiquidItem in liquidItems)
 		{
-			WaterUtils.UpdateWaterBottle(eachLiquidItem.GetComponent<GearItem>());
+			//WaterUtils.UpdateWaterBottle(eachLiquidItem.GetComponent<GearItem>());
 		}
 	}
 }

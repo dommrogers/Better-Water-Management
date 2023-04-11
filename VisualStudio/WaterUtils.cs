@@ -109,8 +109,8 @@ internal class WaterUtils
 
 	internal static void UpdateWaterBottle(GearItem gearItem)
 	{
-		UpdateWaterBottleSound(gearItem);
-		UpdateWaterBottleTexture(gearItem.m_LiquidItem);
+		//UpdateWaterBottleSound(gearItem);
+		//UpdateWaterBottleTexture(gearItem.m_LiquidItem);
 	}
 
 	private static string AppendSuffix(string sound, string suffix)

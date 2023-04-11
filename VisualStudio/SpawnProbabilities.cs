@@ -19,7 +19,7 @@ internal static class SpawnProbabilities
 			DifficultyLevel.Stalker => Settings.options.stalkerSpawnExpectation / 403f * 100f,
 			DifficultyLevel.Interloper => Settings.options.interloperSpawnExpectation / 403f * 100f,
 			DifficultyLevel.Challenge => Settings.options.challengeSpawnExpectation / 403f * 100f,
-			DifficultyLevel.Storymode => Settings.options.storySpawnExpectation / 403f * 100f,
+			//DifficultyLevel.Storymode => Settings.options.storySpawnExpectation / 403f * 100f,
 			_ => 0f,
 		};
 	}
