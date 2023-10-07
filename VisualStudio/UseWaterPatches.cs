@@ -312,8 +312,8 @@ internal class PlayerManager_UseInventoryItem
 		}
 
 		waterSupply.m_VolumeInLiters = liquidItem.m_LiquidLiters;
-		waterSupply.m_WaterQuality = liquidItem.m_LiquidQuality;
-		waterSupply.m_TimeToDrinkSeconds = liquidItem.m_TimeToDrinkSeconds;
-		waterSupply.m_DrinkingAudio = liquidItem.m_DrinkingAudio;
+		//waterSupply.m_WaterQuality = liquidItem.m_LiquidQuality;
+		//waterSupply.m_TimeToDrinkSeconds = liquidItem.m_TimeToDrinkSeconds;
+		//waterSupply.m_DrinkingAudio = liquidItem.m_DrinkingAudio;
 	}
 }

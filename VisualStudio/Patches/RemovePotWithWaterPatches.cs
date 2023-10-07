@@ -1,6 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
 using UnityEngine;
+using Il2CppTLD.Gear;
 
 namespace BetterWaterManagement;
 
@@ -24,7 +25,7 @@ internal static class DrinkFromPot
 		}
 		waterSupply.m_VolumeInLiters = waterAmount;
 		bool potable = cookingPot.GetCookingState() == CookingPotItem.CookingState.Ready;
-		waterSupply.m_WaterQuality = potable ? LiquidQuality.Potable : LiquidQuality.NonPotable;
+		waterSupply.m_LiquidType = potable ? LiquidType.GetPotableWater() : LiquidType.GetNonPotableWater();
 		waterSupply.m_TimeToDrinkSeconds = GameManager.GetInventoryComponent().GetPotableWaterSupply().m_WaterSupply.m_TimeToDrinkSeconds;
 		waterSupply.m_DrinkingAudio = GameManager.GetInventoryComponent().GetPotableWaterSupply().m_WaterSupply.m_DrinkingAudio;
 
@@ -48,7 +49,7 @@ internal class CookingPotItem_DoSpecialActionFromInspectMode
 	internal static bool Prefix(CookingPotItem __instance)
 	{
 		float waterAmount = __instance.m_LitersWaterBeingBoiled;
-		if (Water.IsNone(waterAmount)) //only applies with water 
+		if (ModComponent.Public.IsLoaded()) //only applies with water 
 		{
 			return true;
 		}

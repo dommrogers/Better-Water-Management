@@ -2,6 +2,8 @@
 using HarmonyLib;
 using System.Collections.Generic;
 using UnityEngine;
+using Il2CppTLD.Gear;
+using MelonLoader;
 
 namespace BetterWaterManagement;
 
@@ -116,11 +118,11 @@ public class Water
 		var nonPotableDelta = nonPotableWaterSupply.m_VolumeInLiters - WATER.ActualNonPotable; //the change in nonpotable water held by the player
 
 		//Does nothing if potableDelta and nonPotableDelta are positive
-		WATER.Remove(-nonPotableDelta, LiquidQuality.NonPotable);
-		WATER.Remove(-potableDelta, LiquidQuality.Potable);
+		WATER.Remove(-nonPotableDelta, LiquidType.LiquidQuality.NonPotable);
+		WATER.Remove(-potableDelta, LiquidType.LiquidQuality.Potable);
 		//Does nothing if potableDelta and nonPotableDelta are negative
-		WATER.Add(potableDelta, LiquidQuality.Potable);
-		WATER.Add(nonPotableDelta, LiquidQuality.NonPotable);
+		WATER.Add(potableDelta, LiquidType.LiquidQuality.Potable);
+		WATER.Add(nonPotableDelta, LiquidType.LiquidQuality.NonPotable);
 
 		WATER.UpdateAmounts();//Recalculates the total amounts of water held and the total capacities for each type
 		//WATER.UpdateBottles();//Updates the sound and texture of each water bottle in the inventory
@@ -141,14 +143,14 @@ public class Water
 	}
 
 	//Returns the current value
-	public static float GetActual(LiquidQuality quality)
+	public static float GetActual(LiquidType.LiquidQuality quality)
 	{
-		if (quality == LiquidQuality.NonPotable)
+		if (quality == LiquidType.LiquidQuality.NonPotable)
 		{
 			return WATER.ActualNonPotable;
 		}
 
-		if (quality == LiquidQuality.Potable)
+		if (quality == LiquidType.LiquidQuality.Potable)
 		{
 			return WATER.ActualPotable;
 		}
@@ -157,14 +159,14 @@ public class Water
 	}
 
 	//Returns the current value
-	public static float GetCapacity(LiquidQuality quality)
+	public static float GetCapacity(LiquidType.LiquidQuality quality)
 	{
-		if (quality == LiquidQuality.NonPotable)
+		if (quality == LiquidType.LiquidQuality.NonPotable)
 		{
 			return WATER.CapacityNonPotable;
 		}
 
-		if (quality == LiquidQuality.Potable)
+		if (quality == LiquidType.LiquidQuality.Potable)
 		{
 			return WATER.CapacityPotable;
 		}
@@ -177,12 +179,12 @@ public class Water
 	/// </summary>
 	/// <param name="quality"></param>
 	/// <returns></returns>
-	public static float GetRemainingCapacity(LiquidQuality quality)
+	public static float GetRemainingCapacity(LiquidType.LiquidQuality quality)
 	{
 		return quality switch
 		{
-			LiquidQuality.NonPotable => WATER.RemainingCapacityNonPotable,
-			LiquidQuality.Potable => WATER.RemainingCapacityPotable,
+			LiquidType.LiquidQuality.NonPotable => WATER.RemainingCapacityNonPotable,
+			LiquidType.LiquidQuality.Potable => WATER.RemainingCapacityPotable,
 			_ => 0f,
 		};
 	}
@@ -210,7 +212,7 @@ public class Water
 		{
 			LiquidItem liquidItem = eachItem.GetComponent<LiquidItem>();
 			//if not a liquid item or not a water container
-			if (liquidItem == null || liquidItem.m_LiquidType != GearLiquidTypeEnum.Water)
+			if (liquidItem == null || liquidItem.m_LiquidType != LiquidType.GetPotableWater())
 			{
 				continue; // move to the next item
 			}
@@ -279,7 +281,7 @@ public class Water
 	/// </summary>
 	/// <param name="amount">Amount of water in liters</param>
 	/// <param name="quality">Potable or Nonpotable</param>
-	internal void Add(float amount, LiquidQuality quality)
+	internal void Add(float amount, LiquidType.LiquidQuality quality)
 	{
 		if (IsNone(amount))//returns true for negative numbers, zero, and small positive numbers
 		{
@@ -292,7 +294,7 @@ public class Water
 		//Nonempty bottles
 		foreach (LiquidItem eachLiquidItem in liquidItems)
 		{
-			if (IsEmpty(eachLiquidItem) || eachLiquidItem.m_LiquidQuality != quality)
+			if (IsEmpty(eachLiquidItem) || eachLiquidItem.LiquidType.Quality != quality)
 			{
 				continue;
 			}
@@ -321,7 +323,7 @@ public class Water
 			float transfer = Mathf.Min(remaining, eachLiquidItem.m_LiquidCapacityLiters - eachLiquidItem.m_LiquidLiters);
 
 			eachLiquidItem.m_LiquidLiters += transfer;
-			eachLiquidItem.m_LiquidQuality = quality;
+//			eachLiquidItem.m_LiquidQuality = quality;
 			remaining -= transfer;
 
 			if (IsNone(remaining))
@@ -338,7 +340,7 @@ public class Water
 	/// </summary>
 	/// <param name="amount">Amount of water in liters</param>
 	/// <param name="quality">Potable or Nonpotable</param>
-	internal void Remove(float amount, LiquidQuality quality)
+	internal void Remove(float amount, LiquidType.LiquidQuality quality)
 	{
 		if (IsNone(amount))//returns true for negative numbers, zero, and small positive numbers
 		{
@@ -350,7 +352,7 @@ public class Water
 
 		foreach (LiquidItem eachLiquidItem in liquidItems)
 		{
-			if (IsEmpty(eachLiquidItem) || eachLiquidItem.m_LiquidQuality != quality)
+			if (IsEmpty(eachLiquidItem) || eachLiquidItem.LiquidType.Quality != quality)
 			{
 				continue;
 			}
@@ -388,7 +390,7 @@ public class Water
 			{
 				CapacityEmpty += eachLiquidItem.m_LiquidCapacityLiters;
 			}
-			else if (eachLiquidItem.m_LiquidQuality == LiquidQuality.NonPotable)
+			else if (eachLiquidItem.LiquidType.Quality == LiquidType.LiquidQuality.NonPotable)
 			{
 				CapacityNonPotable += eachLiquidItem.m_LiquidCapacityLiters;
 				ActualNonPotable += eachLiquidItem.m_LiquidLiters;
@@ -399,6 +401,7 @@ public class Water
 				ActualPotable += eachLiquidItem.m_LiquidLiters;
 			}
 		}
+		MelonLogger.Warning($"CapacityEmpty {CapacityEmpty} | CapacityNonPotable {CapacityNonPotable} | ActualNonPotable {ActualNonPotable} | CapacityPotable {CapacityPotable} | ActualPotable {ActualPotable} | ");
 	}
 
 	/// <summary>

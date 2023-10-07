@@ -1,6 +1,7 @@
 ﻿using Il2Cpp;
 using HarmonyLib;
 using UnityEngine;
+using Il2CppTLD.Gear;
 
 namespace BetterWaterManagement;
 
@@ -69,16 +70,16 @@ internal class WaterButtons
 		}
 
 		//If an empty container held nonpotable water before, we want to fill it with potable water.
-		if (Water.IsEmpty(liquidItem) && liquidItem.m_LiquidQuality == LiquidQuality.NonPotable) liquidItem.m_LiquidQuality = LiquidQuality.Potable;
+		if (Water.IsEmpty(liquidItem) && liquidItem.LiquidType == LiquidType.GetNonPotableWater()) liquidItem.LiquidType = LiquidType.GetPotableWater();
 
 		//If the current water supply is empty.
-		if (Water.IsNone(Water.GetActual(liquidItem.m_LiquidQuality)))
+		if (Water.IsNone(Water.GetActual(liquidItem.LiquidType.Quality)))
 		{
 			HUDMessage.AddMessage(Localization.Get("GAMEPLAY_BWM_Empty"));
 			GameAudioManager.PlayGUIError();
 			return;
 		}
-		float maxWaterInBottle = Mathf.Min(Water.GetActual(liquidItem.m_LiquidQuality), liquidItem.m_LiquidCapacityLiters);
+		float maxWaterInBottle = Mathf.Min(Water.GetActual(liquidItem.LiquidType.Quality), liquidItem.m_LiquidCapacityLiters);
 		float maximumWaterRefill = Mathf.Max(maxWaterInBottle - liquidItem.m_LiquidLiters, 0);
 		if (Water.IsNone(maximumWaterRefill)) // If nothing gets transferred.
 		{
@@ -96,12 +97,12 @@ internal class WaterButtons
 		//MelonLoader.MelonLogger.Log("Fill Finished");
 		LiquidItem liquidItem = WaterButtons.currentLiquidItemShowing;
 		// Remove water and adjust the water supply.
-		float maxWaterInBottle = Mathf.Min(Water.GetActual(liquidItem.m_LiquidQuality), liquidItem.m_LiquidCapacityLiters);
+		float maxWaterInBottle = Mathf.Min(Water.GetActual(liquidItem.LiquidType.Quality), liquidItem.m_LiquidCapacityLiters);
 		float maximumWaterRefuel = maxWaterInBottle - liquidItem.m_LiquidLiters;
 		float finalWaterRefuel = maximumWaterRefuel * progress;
 		float finalWaterInBottle = finalWaterRefuel + liquidItem.m_LiquidLiters;
 		liquidItem.m_LiquidLiters = 0;
-		Water.WATER.Remove(finalWaterRefuel, liquidItem.m_LiquidQuality);
+		Water.WATER.Remove(finalWaterRefuel, liquidItem.LiquidType.Quality);
 		liquidItem.m_LiquidLiters = finalWaterInBottle;
 	}
 	private static void OnTransfer()
@@ -115,7 +116,7 @@ internal class WaterButtons
 			GameAudioManager.PlayGUIError();
 			return;
 		}
-		float spaceAvailable = Water.GetRemainingCapacityEmpty() + Water.GetRemainingCapacity(liquidItem.m_LiquidQuality) - liquidItem.m_LiquidCapacityLiters + liquidItem.m_LiquidLiters;
+		float spaceAvailable = Water.GetRemainingCapacityEmpty() + Water.GetRemainingCapacity(liquidItem.LiquidType.Quality) - liquidItem.m_LiquidCapacityLiters + liquidItem.m_LiquidLiters;
 		if (Water.IsNone(spaceAvailable))
 		{
 			HUDMessage.AddMessage(Localization.Get("GAMEPLAY_BWM_NoCapacityAvailable"));
@@ -133,11 +134,11 @@ internal class WaterButtons
 		//MelonLoader.MelonLogger.Log("Transfer Finished");
 		var liquidItem = WaterButtons.currentLiquidItemShowing;
 		float liquidBefore = liquidItem.m_LiquidLiters;
-		float spaceAvailable = Water.GetRemainingCapacityEmpty() + Water.GetRemainingCapacity(liquidItem.m_LiquidQuality) - liquidItem.m_LiquidCapacityLiters + liquidItem.m_LiquidLiters;
+		float spaceAvailable = Water.GetRemainingCapacityEmpty() + Water.GetRemainingCapacity(liquidItem.LiquidType.Quality) - liquidItem.m_LiquidCapacityLiters + liquidItem.m_LiquidLiters;
 		float maximumWaterTransfer = Mathf.Min(spaceAvailable, liquidItem.m_LiquidLiters);
 		float actualWaterTransfer = progress * maximumWaterTransfer;
 		liquidItem.m_LiquidLiters = liquidItem.m_LiquidCapacityLiters;
-		Water.WATER.Add(actualWaterTransfer, liquidItem.m_LiquidQuality);
+		Water.WATER.Add(actualWaterTransfer, liquidItem.LiquidType.Quality);
 		liquidItem.m_LiquidLiters = liquidBefore - actualWaterTransfer;
 		Water.AdjustWaterSupplyToWater();
 	}
@@ -164,7 +165,7 @@ internal class WaterButtons
 		//MelonLoader.MelonLogger.Log("Dump Finished");
 		LiquidItem liquidItem = WaterButtons.currentLiquidItemShowing;
 		float lostLiters = liquidItem.m_LiquidLiters * progress;
-		if (liquidItem.m_LiquidQuality == LiquidQuality.Potable) // Potable water
+		if (liquidItem.LiquidType.Quality == LiquidType.LiquidQuality.Potable) // Potable water
 		{
 			WaterSupply potableWaterSupply = GameManager.GetInventoryComponent().GetPotableWaterSupply().m_WaterSupply;
 			Water.ShowLostMessage(potableWaterSupply, "GAMEPLAY_WaterPotable", lostLiters);
@@ -197,7 +198,7 @@ internal class UpdateGearItemDescription
 	{
 		if (__instance != InterfaceManager.GetPanel<Panel_Inventory>()?.m_ItemDescriptionPage) return;
 		WaterButtons.currentLiquidItemShowing = gi?.GetComponent<LiquidItem>();
-		if (WaterButtons.currentLiquidItemShowing == null || WaterButtons.currentLiquidItemShowing.m_LiquidType != GearLiquidTypeEnum.Water)
+		if (WaterButtons.currentLiquidItemShowing == null || WaterButtons.currentLiquidItemShowing.m_LiquidType != LiquidType.GetPotableWater())
 		{
 			WaterButtons.SetActive(false);
 		}

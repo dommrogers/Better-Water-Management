@@ -13,10 +13,10 @@ internal class MeltAndCookButton
 
 	public static void Execute()
 	{
-		Panel_Cooking panel_Cooking = InterfaceManager.GetPanel<Panel_Cooking>();
-		GearItem cookedItem = panel_Cooking.GetSelectedFood();
-		CookingPotItem cookingPotItem = panel_Cooking.m_CookingPotInteractedWith;
-		CookSettings cookSettings = panel_Cooking.m_CookSettings;
+		Panel_CookWater panel_CookWater = InterfaceManager.GetPanel<Panel_CookWater>();
+		GearItem cookedItem = panel_CookWater.GetSelectedFood();
+		CookingPotItem cookingPotItem = panel_CookWater.m_CookingPotInteractedWith;
+		CookSettings cookSettings = panel_CookWater.m_CookSettings;
 
 		GearItem result = cookedItem.Drop(1, false, true);
 
@@ -24,16 +24,16 @@ internal class MeltAndCookButton
 		cookingModifier.additionalMinutes = result.m_Cookable.m_PotableWaterRequiredLiters * cookSettings.m_MinutesToMeltSnowPerLiter;
 		cookingModifier.Apply();
 
-		GameAudioManager.Play3DSound(result.m_Cookable.m_PutInPotAudio, cookingPotItem.gameObject);
+		GameAudioManager.Play3DSound(result.m_Cookable.PutInPotAudio, cookingPotItem.gameObject);
 		cookingPotItem.StartCooking(result);
-		panel_Cooking.ExitCookingInterface();
+		panel_CookWater.ExitCookingInterface();
 	}
 
-	internal static void Initialize(Panel_Cooking panel_Cooking)
+	internal static void Initialize(Panel_CookWater panel_CookWater)
 	{
 		text = Localization.Get("GAMEPLAY_ButtonMelt") + " & " + Localization.Get("GAMEPLAY_ButtonCook");
 
-		button = UnityEngine.Object.Instantiate<GameObject>(panel_Cooking.m_ActionButtonObject, panel_Cooking.m_ActionButtonObject.transform.parent, true);
+		button = UnityEngine.Object.Instantiate<GameObject>(panel_CookWater.m_ActionButtonObject, panel_CookWater.m_ActionButtonObject.transform.parent, true);
 		button.transform.Translate(0, 0.09f, 0);
 		Utils.GetComponentInChildren<UILabel>(button).text = text;
 		Il2CppSystem.Collections.Generic.List<EventDelegate> placeHolderList = new Il2CppSystem.Collections.Generic.List<EventDelegate>();
@@ -49,10 +49,10 @@ internal class MeltAndCookButton
 	}
 }
 
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.RefreshFoodList))]
-internal class Panel_Cooking_RefreshFoodList
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.RefreshFoodList))]
+internal class Panel_CookWater_RefreshFoodList
 {
-	internal static void Postfix(Panel_Cooking __instance)
+	internal static void Postfix(Panel_CookWater __instance)
 	{
 		Il2CppSystem.Collections.Generic.List<GearItem> foodList = __instance.m_FoodList;
 		if (foodList == null)
@@ -69,19 +69,19 @@ internal class Panel_Cooking_RefreshFoodList
 	}
 }
 
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.Initialize))]
-internal class Panel_Cooking_Initialize
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.Initialize))]
+internal class Panel_CookWater_Initialize
 {
-	internal static void Postfix(Panel_Cooking __instance)
+	internal static void Postfix(Panel_CookWater __instance)
 	{
 		MeltAndCookButton.Initialize(__instance);
 	}
 }
 
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.UpdateButtonLegend))]
-internal class Panel_Cooking_UpdateButtonLegend
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.UpdateButtonLegend))]
+internal class Panel_CookWater_UpdateButtonLegend
 {
-	internal static void Prefix(Panel_Cooking __instance)
+	internal static void Prefix(Panel_CookWater __instance)
 	{
 		GearItem cookedItem = __instance.GetSelectedFood();
 		bool requiresWater = (cookedItem?.m_Cookable?.m_PotableWaterRequiredLiters ?? 0) > 0;
@@ -98,10 +98,10 @@ internal class Panel_Cooking_UpdateButtonLegend
 	}
 }
 
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.UpdateGamepadControls))]
-internal class Panel_Cooking_UpdateGamepadControls
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.UpdateGamepadControls))]
+internal class Panel_CookWater_UpdateGamepadControls
 {
-	internal static bool Prefix(Panel_Cooking __instance)
+	internal static bool Prefix(Panel_CookWater __instance)
 	{
 		if (!InputManager.GetInventoryDropPressed(GameManager.Instance()))
 		{
@@ -120,10 +120,10 @@ internal class Panel_Cooking_UpdateGamepadControls
 	}
 }
 
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.UpdateGearItem))]
-internal class Panel_Cooking_UpdateGearItem
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.UpdateGearItem))]
+internal class Panel_CookWater_UpdateGearItem
 {
-	internal static void Postfix(Panel_Cooking __instance)
+	internal static void Postfix(Panel_CookWater __instance)
 	{
 		CookSettings cookSettings = __instance.m_CookSettings;
 		GearItem cookedItem = __instance.GetSelectedFood();

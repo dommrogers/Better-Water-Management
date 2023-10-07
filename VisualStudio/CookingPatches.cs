@@ -132,7 +132,7 @@ internal class CookingPotItem_StartCooking
 }
 
 //[HarmonyPatch(typeof(CookingPotItem), nameof(CookingPotItem.StartMeltingSnow))] //inlined
-[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.OnMeltSnow))]
+[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.OnMeltSnow))]
 internal class CookingPotItem_StartMeltingSnow
 {
 	internal static void Postfix(CookingPotItem __instance)

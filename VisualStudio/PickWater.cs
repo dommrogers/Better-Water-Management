@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppTLD.Gear;
 using UnityEngine;
 
 namespace BetterWaterManagement;
@@ -13,11 +14,17 @@ internal class PickWater
 		WaterSource waterSource = GetWaterSource(panel);
 		if (!waterSource)
 		{
+			Implementation.LogError("Could not find WaterSource to transfer to");
+			return;
+		}
+		WaterSupply waterSupply = GetWaterSupply(panel);
+		if (!waterSupply)
+		{
 			Implementation.LogError("Could not find WaterSupply to transfer to");
 			return;
 		}
 
-		float limit = Water.GetRemainingCapacity(waterSource.GetQuality()) + Water.GetRemainingCapacityEmpty();
+		float limit = Water.GetRemainingCapacity(waterSupply.m_LiquidType.Quality) + Water.GetRemainingCapacityEmpty();
 		panel.m_numLiters = Mathf.Min(panel.m_numLiters, limit);
 	}
 
@@ -58,7 +65,14 @@ internal class PickWater
 			return;
 		}
 
-		float limit = Water.GetRemainingCapacity(waterSource.GetQuality()) + Water.GetRemainingCapacityEmpty();
+		WaterSupply waterSupply = GetWaterSupply(panel);
+		if (!waterSupply)
+		{
+			Implementation.LogError("Could not find WaterSupply to transfer to");
+			return;
+		}
+
+		float limit = Water.GetRemainingCapacity(waterSupply.m_LiquidType.Quality) + Water.GetRemainingCapacityEmpty();
 		panel.m_ButtonIncrease.SetActive(panel.m_numLiters < limit);
 	}
 
@@ -70,15 +84,21 @@ internal class PickWater
 			Implementation.LogError("UpdateCapacityInfo: Could not find WaterSource");
 			return;
 		}
+		WaterSupply waterSupply = GetWaterSupply(panel);
+		if (!waterSupply)
+		{
+			Implementation.LogError("Could not find WaterSupply to transfer to");
+			return;
+		}
 
-		labelCapacityInfo.text = GetWaterInfo(LiquidQuality.Potable) + "            " +
-			GetWaterInfo(LiquidQuality.NonPotable) + "            " +
+		labelCapacityInfo.text = GetWaterInfo(LiquidType.LiquidQuality.Potable) + "            " +
+			GetWaterInfo(LiquidType.LiquidQuality.NonPotable) + "            " +
 			Localization.Get("GAMEPLAY_BWM_Empty") + ": " + WaterUtils.FormatWaterAmountWithUnits(Water.GetRemainingCapacityEmpty());
 
-		labelNoCapacityWarning.gameObject.SetActive(Water.GetRemainingCapacityEmpty() == 0 && Water.GetRemainingCapacity(waterSource.GetQuality()) == 0);
+		labelNoCapacityWarning.gameObject.SetActive(Water.GetRemainingCapacityEmpty() == 0 && Water.GetRemainingCapacity(waterSupply.m_LiquidType.Quality) == 0);
 	}
 
-	private static string GetWaterInfo(LiquidQuality quality)
+	private static string GetWaterInfo(LiquidType.LiquidQuality quality)
 	{
 		return Localization.Get("GAMEPLAY_Water" + quality.ToString()) + ": " + WaterUtils.FormatWaterAmount(Water.GetActual(quality)) + "/" + WaterUtils.FormatWaterAmountWithUnits(Water.GetCapacity(quality));
 	}
@@ -95,6 +115,11 @@ internal class PickWater
 	{
 		//return Traverse.Create(panel).Field("m_WaterSource").GetValue<WaterSource>();
 		return panel.m_WaterSource;
+	}
+	private static WaterSupply GetWaterSupply(Panel_PickWater panel)
+	{
+		//return Traverse.Create(panel).Field("m_WaterSource").GetValue<WaterSource>();
+		return panel.m_WaterSupply;
 	}
 
 	private static void Refresh(Panel_PickWater panel)

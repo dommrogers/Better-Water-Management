@@ -2,6 +2,8 @@
 using HarmonyLib;
 using UnityEngine;
 using Il2CppTLD.Gear;
+using MelonLoader;
+using UnityEngine.AddressableAssets;
 
 namespace BetterWaterManagement;
 
@@ -12,7 +14,7 @@ internal class ConditionTableManager_GetDisplayNameWithCondition
 	internal static void Postfix(GearItemData __instance, ref string __result)
 	{
 		LiquidItem liquidItem = __instance.PrefabReference.LoadAssetAsync<GameObject>().WaitForCompletion().GetComponent<GearItem>().m_LiquidItem;
-		if (!liquidItem || liquidItem.m_LiquidType != GearLiquidTypeEnum.Water)
+		if (!liquidItem || liquidItem.m_LiquidType != LiquidType.GetPotableWater())
 		{
 			return;
 		}
@@ -21,7 +23,7 @@ internal class ConditionTableManager_GetDisplayNameWithCondition
 		{
 			__result += " - " + Localization.Get("GAMEPLAY_BWM_Empty");
 		}
-		else if (liquidItem.m_LiquidQuality == LiquidQuality.Potable)
+		else if (liquidItem.m_LiquidType.Quality == LiquidType.LiquidQuality.Potable)
 		{
 			__result += " - " + Localization.Get("GAMEPLAY_WaterPotable");
 		}
@@ -99,15 +101,13 @@ internal class Inventory_Deserialize
 [HarmonyPatch(typeof(Inventory), nameof(Inventory.AddGear))]
 internal class Inventory_AddGear
 {
-	private const GearLiquidTypeEnum ModWater = (GearLiquidTypeEnum)1000;
-
 	internal static void Postfix(GearItem gi)
 	{
 		LiquidItem liquidItem = gi.gameObject.GetComponent<LiquidItem>();
-		if (liquidItem && liquidItem.m_LiquidType == ModWater)
+		if (liquidItem && liquidItem.m_LiquidType == Implementation.ModWater)
 		{
 
-			liquidItem.m_LiquidType = GearLiquidTypeEnum.Water;
+			liquidItem.m_LiquidType = LiquidType.GetPotableWater();
 			Water.AdjustWaterSupplyToWater();
 		}
 	}
@@ -115,9 +115,9 @@ internal class Inventory_AddGear
 	internal static void Prefix(Inventory __instance, GearItem gi)
 	{
 		LiquidItem liquidItem = gi.gameObject.GetComponent<LiquidItem>();
-		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
+		if (liquidItem && liquidItem.m_LiquidType == LiquidType.GetPotableWater())
 		{
-			liquidItem.m_LiquidType = ModWater;
+			liquidItem.m_LiquidType = Implementation.ModWater;
 		}
 	}
 }
@@ -150,7 +150,7 @@ internal class Inventory_RemoveGear
 			return;
 		}
 		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
-		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
+		if (liquidItem && liquidItem.m_LiquidType == LiquidType.GetPotableWater())
 		{
 			Water.AdjustWaterSupplyToWater();
 		}
@@ -168,7 +168,8 @@ internal class Inventory_RemoveGear2
 			return;
 		}
 		LiquidItem liquidItem = go.GetComponent<LiquidItem>();
-		if (liquidItem && liquidItem.m_LiquidType == GearLiquidTypeEnum.Water)
+		MelonLogger.Log($"Inventory_RemoveGear2 {go.name} {GameManager.m_ActiveScene}");
+		if (liquidItem && liquidItem.m_LiquidType == LiquidType.GetPotableWater())
 		{
 			Water.AdjustWaterSupplyToWater();
 		}
@@ -299,7 +300,7 @@ internal class Utils_GetInventoryIconTexture
 	internal static bool Prefix(GearItem gi, ref Texture2D __result)
 	{
 		LiquidItem liquidItem = gi.m_LiquidItem;
-		if (!liquidItem || liquidItem.m_LiquidType != GearLiquidTypeEnum.Water)
+		if (!liquidItem || liquidItem.m_LiquidType != LiquidType.GetPotableWater())
 		{
 			return true;
 		}
@@ -319,8 +320,8 @@ internal class WaterSourceSupply : WaterSupply
 	{
 		this.waterSource = waterSource;
 		m_VolumeInLiters = waterSource.GetVolumeLiters();
-		m_WaterQuality = waterSource.GetQuality();
-		m_DrinkingAudio = "Play_Slurping1";
+//		m_CurrentLiquidQuality = waterSource.GetQuality();
+//		m_DrinkingAudio = "Play_Slurping1";
 		m_TimeToDrinkSeconds = 4;
 	}
 

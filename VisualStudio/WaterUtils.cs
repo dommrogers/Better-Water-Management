@@ -1,4 +1,5 @@
 ﻿using Il2Cpp;
+using Il2CppTLD.Gear;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -15,7 +16,7 @@ internal class WaterUtils
 
 	internal static bool ContainsPotableWater(GearItem gearItem)
 	{
-		return ContainsWater(gearItem) && gearItem.m_LiquidItem.m_LiquidQuality == LiquidQuality.Potable;
+		return ContainsWater(gearItem) && gearItem.m_LiquidItem.LiquidType.Quality == LiquidType.LiquidQuality.Potable;
 	}
 
 	internal static string FormatWaterAmount(float liters)
@@ -68,7 +69,7 @@ internal class WaterUtils
 			return "_empty";
 		}
 
-		if (liquidItem.m_LiquidQuality == LiquidQuality.NonPotable)
+		if (liquidItem.LiquidType.Quality == LiquidType.LiquidQuality.NonPotable)
 		{
 			return "_nonpotable";
 		}
@@ -83,12 +84,12 @@ internal class WaterUtils
 
 	internal static bool IsCooledDown(CookingPotItem cookingPotItem)
 	{
-		return (cookingPotItem.m_GracePeriodElapsedHours * 60f) > InterfaceManager.GetPanel<Panel_Cooking>().m_CookSettings.m_MinutesGraceTimeInterruptedCooking;
+		return (cookingPotItem.m_GracePeriodElapsedHours * 60f) > InterfaceManager.GetPanel<Panel_CookWater>().m_CookSettings.m_MinutesGraceTimeInterruptedCooking;
 	}
 
 	internal static bool IsWaterItem(GearItem gearItem)
 	{
-		return gearItem != null && gearItem.m_LiquidItem != null && gearItem.m_LiquidItem.m_LiquidType == GearLiquidTypeEnum.Water;
+		return gearItem != null && gearItem.m_LiquidItem != null && gearItem.m_LiquidItem.m_LiquidType == LiquidType.GetPotableWater();
 	}
 
 	internal static void SetElapsedCookingTime(CookingPotItem cookingPotItem, float hours)
@@ -98,7 +99,7 @@ internal class WaterUtils
 
 	internal static void SetElapsedCookingTimeForWater(CookingPotItem cookingPotItem, float waterLiters)
 	{
-		float hours = waterLiters * InterfaceManager.GetPanel<Panel_Cooking>().m_CookSettings.m_MinutesToBoilWaterPerLiter * cookingPotItem.GetTotalBoilMultiplier() / 60f;
+		float hours = waterLiters * InterfaceManager.GetPanel<Panel_CookWater>().m_CookSettings.m_MinutesToBoilWaterPerLiter * cookingPotItem.GetTotalBoilMultiplier() / 60f;
 		SetElapsedCookingTime(cookingPotItem, hours);
 	}
 

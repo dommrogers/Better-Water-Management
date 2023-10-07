@@ -8,14 +8,14 @@ namespace BetterWaterManagement;
 //
 internal class PanelCookingPatches
 {
-	[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.OnBoilDown))]
-	internal class Panel_Cooking_OnBoilDown
+	[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.OnBoilDown))]
+	internal class Panel_CookWater_OnBoilDown
 	{
-		private static void Prefix(Panel_Cooking __instance, out float __state)
+		private static void Prefix(Panel_CookWater __instance, out float __state)
 		{
 			__state = __instance.m_BoilWaterLiters;
 		}
-		private static void Postfix(Panel_Cooking __instance, float __state)
+		private static void Postfix(Panel_CookWater __instance, float __state)
 		{
 			//Implementation.Log("OnBoilDown");
 			if (__state != __instance.m_BoilWaterLiters)
@@ -25,14 +25,14 @@ internal class PanelCookingPatches
 			}
 		}
 	}
-	[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.OnBoilUp))]
-	internal class Panel_Cooking_OnBoilUp
+	[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.OnBoilUp))]
+	internal class Panel_CookWater_OnBoilUp
 	{
-		private static void Prefix(Panel_Cooking __instance, out float __state)
+		private static void Prefix(Panel_CookWater __instance, out float __state)
 		{
 			__state = __instance.m_BoilWaterLiters;
 		}
-		private static void Postfix(Panel_Cooking __instance, float __state)
+		private static void Postfix(Panel_CookWater __instance, float __state)
 		{
 			//Implementation.Log("OnBoilUp");
 			if (__state != __instance.m_BoilWaterLiters)
@@ -42,14 +42,14 @@ internal class PanelCookingPatches
 			}
 		}
 	}
-	[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.OnMeltSnowDown))]
-	internal class Panel_Cooking_OnMeltSnowDown
+	[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.OnMeltSnowDown))]
+	internal class Panel_CookWater_OnMeltSnowDown
 	{
-		private static void Prefix(Panel_Cooking __instance, out float __state)
+		private static void Prefix(Panel_CookWater __instance, out float __state)
 		{
 			__state = __instance.m_MeltSnowLiters;
 		}
-		private static void Postfix(Panel_Cooking __instance, float __state)
+		private static void Postfix(Panel_CookWater __instance, float __state)
 		{
 			//Implementation.Log("OnMeltSnowDown");
 			if (__state != __instance.m_MeltSnowLiters)
@@ -59,14 +59,14 @@ internal class PanelCookingPatches
 			}
 		}
 	}
-	[HarmonyPatch(typeof(Panel_Cooking), nameof(Panel_Cooking.OnMeltSnowUp))]
-	internal class Panel_Cooking_OnMeltSnowUp
+	[HarmonyPatch(typeof(Panel_CookWater), nameof(Panel_CookWater.OnMeltSnowUp))]
+	internal class Panel_CookWater_OnMeltSnowUp
 	{
-		private static void Prefix(Panel_Cooking __instance, out float __state)
+		private static void Prefix(Panel_CookWater __instance, out float __state)
 		{
 			__state = __instance.m_MeltSnowLiters;
 		}
-		private static void Postfix(Panel_Cooking __instance, float __state)
+		private static void Postfix(Panel_CookWater __instance, float __state)
 		{
 			//Implementation.Log("OnMeltSnowUp");
 			if (__state != __instance.m_MeltSnowLiters)
